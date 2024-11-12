@@ -28,13 +28,13 @@ jobs:
       - name: Read juicefs versions
         id: read_versions
         run: |
-            versions=$(cat juicefs_versions.txt)
+            versions=$(cat juicefs_versions.txt | tr '\n' ' ')
             echo "::set-output name=versions::$versions"
 
       - name: Build and push Docker images
         run: |
             versions="${{ steps.read_versions.outputs.versions }}"
-            latest_version=$(echo "$versions" | tail -n 1)
+            latest_version=$(echo "$versions" | awk '{print $NF}')
             for version in $versions; do
                 docker build --build-arg JFS_VERSION_TAG=$version -t ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:$version .
                 docker push ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:$version
