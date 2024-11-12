@@ -15,7 +15,7 @@ RUN set -x && \
 FROM alpine:3.20.3
 
 # Install necessary packages
-RUN apk add --no-cache tzdata
+RUN apk add --no-cache tzdata fuse
 
 # Create a non-root user and group
 RUN addgroup -S juicefs && adduser -S juicefs -G juicefs
