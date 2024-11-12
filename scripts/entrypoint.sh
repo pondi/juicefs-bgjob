@@ -2,8 +2,7 @@
 
 if [ ! -f /etc/timezone ] && [ ! -z "$TZ" ]; then
   # At first startup, set timezone
-  cp /usr/share/zoneinfo/$TZ /etc/localtime
-  echo $TZ >/etc/timezone
+  ln -s /usr/share/zoneinfo/$TZ /etc/localtime
 fi
 
 # Check if all required environment variables are set
