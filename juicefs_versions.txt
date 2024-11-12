@@ -1,4 +1,3 @@
-# Versions to build JuiceFS
 1.0.7
 1.1.1
 1.1.2
