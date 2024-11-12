@@ -1,10 +1,5 @@
 #!/bin/sh -e
 
-if [ ! -f /etc/timezone ] && [ ! -z "$TZ" ]; then
-  # At first startup, set timezone
-  ln -s /usr/share/zoneinfo/$TZ /etc/localtime
-fi
-
 # Check if all required environment variables are set
 for var in JUICEFS_MOUNTSTRING; do
   if [ -z "$(eval echo \$$var)" ]; then
