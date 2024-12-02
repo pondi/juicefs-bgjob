@@ -37,8 +37,10 @@ The following JuiceFS versions are pre-built on Docker Hub:
 - **1.1.2**
 - **1.1.3**
 - **1.1.4**
+- **1.1.5**
 - **1.2.0**
 - **1.2.1**
+- **1.2.2**
 
 ---
 
