@@ -1,30 +1,36 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
-  ],
-  "docker": {
-    "enabled": true,
-    "pinDigests": true
-  },
-  "packageRules": [
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["alpine"],
-      "matchUpdateTypes": ["digest", "patch"],
-      "automerge": true,
-      "platformAutomerge": true,
-      "pinDigests": true,
-      "groupName": "alpine-digest-patch"
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+      "config:base"
+    ],
+    "semanticCommits": "enabled",
+    "semanticCommitType": "chore",
+    "semanticCommitScope": "deps",
+    "prTitle": "{{{commitMessagePrefix}}} {{{prettyDepType}}} `{{{depName}}}` to {{#if isMajor}}v{{{newMajor}}}{{else}}v{{{newVersion}}}{{/if}}",
+    "commitMessageExtra": "from v{{{currentVersion}}} to v{{{newVersion}}}",
+    "commitMessageTopic": "dependencies {{depName}}",
+    "docker": {
+      "enabled": true,
+      "pinDigests": true
     },
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["alpine"],
-      "matchUpdateTypes": ["major", "minor"],
-      "reviewers": ["pondi"],
-      "assignees": ["pondi"],
-      "pinDigests": true,
-      "groupName": "alpine-version-updates"
-    }
-  ]
-} 
+    "packageRules": [
+      {
+        "matchDatasources": ["docker"],
+        "matchPackageNames": ["alpine"],
+        "matchUpdateTypes": ["digest", "patch"],
+        "automerge": true,
+        "platformAutomerge": true,
+        "pinDigests": true,
+        "groupName": "alpine-digest-patch"
+      },
+      {
+        "matchDatasources": ["docker"],
+        "matchPackageNames": ["alpine"],
+        "matchUpdateTypes": ["major", "minor"],
+        "reviewers": ["pondi"],
+        "assignees": ["pondi"],
+        "pinDigests": true,
+        "groupName": "alpine-version-updates"
+      }
+    ]
+  } 
