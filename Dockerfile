@@ -1,5 +1,4 @@
-FROM alpine:3.20.3 AS build
-ARG JFS_VERSION_TAG=1.2.1
+FROM alpine:3.21.2@sha256:56fa17d2a7e7f168a043a2712e63aed1f8543aeafdcee47c58dcffe38ed51099 AS build
 
 RUN apk add --no-cache curl fuse
 
@@ -12,7 +11,7 @@ RUN set -x && \
     cd .. && \
     rm -rf /juicefs
 
-FROM alpine:3.20.3
+FROM alpine:3.21.2@sha256:56fa17d2a7e7f168a043a2712e63aed1f8543aeafdcee47c58dcffe38ed51099
 
 # Install necessary packages
 RUN apk add --no-cache tzdata fuse

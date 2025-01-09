@@ -1,0 +1,30 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "docker": {
+    "enabled": true,
+    "pinDigests": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["alpine"],
+      "matchUpdateTypes": ["digest", "patch"],
+      "automerge": true,
+      "platformAutomerge": true,
+      "pinDigests": true,
+      "groupName": "alpine-digest-patch"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["alpine"],
+      "matchUpdateTypes": ["major", "minor"],
+      "reviewers": ["pondi"],
+      "assignees": ["pondi"],
+      "pinDigests": true,
+      "groupName": "alpine-version-updates"
+    }
+  ]
+} 
