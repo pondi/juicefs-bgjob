@@ -14,30 +14,49 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: latest
+          buildkitd-flags: --debug
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Read juicefs versions
         id: read_versions
         run: |
-            versions=$(cat juicefs_versions.txt | tr '\n' ' ')
-            echo "::set-output name=versions::$versions"
+          echo "versions=$(cat juicefs_versions.txt | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "latest_version=$(tail -n1 juicefs_versions.txt)" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker images
         run: |
-            versions="${{ steps.read_versions.outputs.versions }}"
-            latest_version=$(echo "$versions" | awk '{print $NF}')
-            for version in $versions; do
-                docker build --build-arg JFS_VERSION_TAG=$version -t ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:$version .
-                docker push ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:$version
-            done
-            docker tag ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:$latest_version ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:latest
-            docker push ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:latest
+          versions="${{ steps.read_versions.outputs.versions }}"
+          latest_version="${{ steps.read_versions.outputs.latest_version }}"
+          
+          for version in $versions; do
+            # Build with Buildx including provenance and SBOM
+            docker buildx build \
+              --platform linux/amd64,linux/arm64 \
+              --provenance=true \
+              --sbom=true \
+              --build-arg JFS_VERSION_TAG=$version \
+              --push \
+              --tag ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:$version \
+              .
+          done
+          
+          # Tag and push latest version
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --provenance=true \
+            --sbom=true \
+            --build-arg JFS_VERSION_TAG=$latest_version \
+            --push \
+            --tag ${{ secrets.DOCKER_USERNAME }}/juicefs-bgjob:latest \
+            .
