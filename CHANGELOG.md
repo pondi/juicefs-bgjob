@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/pondi/juicefs-bgjob/compare/v1.2.0...v1.3.0) (2025-09-03)
+
+
+### Features
+
+* **versions:** Adding 1.2.4 and 1.3.0 support ([beab640](https://github.com/pondi/juicefs-bgjob/commit/beab64063aac0f03f6d7e915216a15fd0caf886c))
+
 # [1.2.0](https://github.com/pondi/juicefs-bgjob/compare/v1.1.0...v1.2.0) (2025-01-22)
 
 
